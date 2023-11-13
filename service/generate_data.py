@@ -19,15 +19,19 @@ def create_adjectives():
     return random_row[0]
 
 def create_username():
-    while(True):
+    max_tries = 5
+    current_try = 0
+
+    while current_try < max_tries:
         first_adjectives = create_adjectives()
         second_name = create_name()
         username = first_adjectives + " " + second_name
-        username = "testname"
+
         if overlap_username_chk(username):
-           continue
+            current_attempt += 1
         else:
             return insert_username(username)
+    return False
         
 def overlap_username_chk(username):
     conn = connect_db()
