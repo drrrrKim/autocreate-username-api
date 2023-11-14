@@ -1,11 +1,19 @@
-from fastapi import APIRouter
-from service.generate_data import create_name, create_adjectives
+from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
+from service.generate_data import create_username
 
 router = APIRouter()
 
-@router.get('/create')
-async def create_user_name():
-    first_adjectives = await create_adjectives()
-    second_name = await create_name()
-    username = first_adjectives + " " + second_name
-    return {"username":username}
+@router.post('/create')
+def create_user_name():
+    username = create_username()
+    if username:
+        return JSONResponse(
+            status_code=201,
+            content={"username": username}
+        )
+    else:
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to create user name"
+        )
